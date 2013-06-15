@@ -1,0 +1,57 @@
+<?php
+if(!defined('IN_MYBB'))
+{
+	die("Direct initialization of this file is not allowed.<br /><br />Please make sure IN_MYBB is defined.");
+}
+
+add_hook('parse_message', 'username_parse');
+// Funkcja z informacjami o pluginie
+function username_info() 
+{
+        return array(
+                'name'                  => 'Mój pierwszy plugin',
+                'description'   => 'Ten plugin tworzę dla nauki, aby dowiedzieć się jak rozszerzać moje forum.',
+                'website'               => 'http://webax.eu/',
+                'author'                => 'Thelleo dla Webax.eu',
+                'authorsite'    => 'http://webax.eu/',
+                'version'               => '1.0.0',
+                'guid'                  => '',
+                'compatibility' => '16*'
+        );
+}
+
+function username_activate()
+{
+
+}
+
+function username_deactivate()
+{
+
+} 
+function username_install()
+{
+	
+}
+function username_is_installed()
+{
+}
+function username_uninstall() 
+{
+	}
+	
+
+function username_parse($message) 
+{
+        // Powodujemy, że zmienna zawierająca obiekt klasy MyBB jest widoczna w funkcji
+        global $mybb; 
+        // Tworzymy sobie skrót do tablicy z informacjami o zalogowanym użytkowniku
+        $user = $mybb->user;
+        // Jeżeli użytkownik nie jest zalogowany to przyznajemy mu nick "Gość"
+        if(empty($user['username'])) $user['username'] = 'Gość';
+        // Korzystając z funkcji str_replace() zamieniamy [username] na nick użytkownika
+        $message = str_replace('[username]', $user['username'], $message);
+        // Zwracamy zmodyfikowaną wiadomość do parsera
+        return $message;
+}
+?>
