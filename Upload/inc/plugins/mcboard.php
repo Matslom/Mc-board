@@ -128,7 +128,6 @@ function mcboard_start() {
 <td class="tcat" colspan="0"><span class="smalltext"><strong>Status:</strong></span></td>
 <td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td>';*/
 
-
     while($mc = $db->fetch_array($query)) {
         if(!$mc['rodzaj'] == 2) {
             $mc['rodzaj'] = 'Premium';
@@ -137,20 +136,19 @@ function mcboard_start() {
        }
         $IP = $mc['ip'];
         $PORT = $mc['port']; 
-		
-	require_once MYBB_ROOT."inc/plugins/minequery/MinecraftQuery.class.php";
+			
+		require_once MYBB_ROOT."inc/plugins/minequery/MinecraftQuery.class.php";
 		try
 		{
 		$Query = new MinecraftQuery();
- 		$Query->Connect($IP, $PORT, 1);
-		$dane = $Query->GetInfo();
+ 		$Query->Connect($IP, $PORT, 2);
        }
                catch( MinecraftQueryException $e )
     {
         $error = $e->getMessage( );
     }
         
-        /*print_r( $Query->GetPlayers( ) );*/
+        $dane = $Query->GetInfo();
 	
 	if($info['serverlocked'] !== 0) {
 			

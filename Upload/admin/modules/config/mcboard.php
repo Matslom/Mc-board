@@ -79,34 +79,34 @@ if($mybb->input['action'] == "add")
 
 if($mybb->input['action'] == "delete")
 {
-	$plugins->run_hooks("admin_config_csboard_delete");
+	$plugins->run_hooks("admin_config_mcboard_delete");
 	
-	$query = $db->simple_select("csboard", "*", "csb='".intval($mybb->input['csb'])."'");
-	$cs = $db->fetch_array($query);
+	$query = $db->simple_select("mcboard", "*", "id='".intval($mybb->input['id'])."'");
+	$mc = $db->fetch_array($query);
 	
-	if(!$cs['csb'])
+	if(!$mc['id'])
 	{
 		flash_message("Serwer nie został pomyślnie usunięty.", 'error');
-		admin_redirect("index.php?module=config/csboard");
+		admin_redirect("index.php?module=config/mcboard");
 	}
 
 	if($mybb->input['no'])
 	{
-		admin_redirect("index.php?module=config/csboard");
+		admin_redirect("index.php?module=config/mcboard");
 	}
 
 	if($mybb->request_method == "post")
 	{
-		$db->delete_query("csboard", "csb='{$cs['csb']}'");
+		$db->delete_query("mcboard", "id='{$mc['id']}'");
 		
-		$plugins->run_hooks("admin_config_csboard_delete_commit");
+		$plugins->run_hooks("admin_config_mcboard_delete_commit");
 
 		flash_message("Serwer został usunięty pomyślnie.", 'success');
-		admin_redirect("index.php?module=config/csboard");
+		admin_redirect("index.php?module=config/mcboard");
 	}
 	else
 	{
-		$page->output_confirm_action("index.php?module=config/csboard&amp;action=delete&amp;csb={$cs['csb']}", "Serwer został usunięty pomyślnie.");
+		$page->output_confirm_action("index.php?module=config/mcboard&amp;action=delete&amp;id={$mc['id']}", "Serwer został usunięty pomyślnie.");
 	}
 }
 
@@ -187,23 +187,29 @@ if(!$mybb->input['action'])
 			while($mc = $db->fetch_array($query)) {
         if(!$mc['rodzaj'] == 2) {
             $mc['rodzaj'] = 'Premium';
-        } elseif($mc['rodzaj'] == 2) {
+        } elseif($mc['rodzaj'] < 2) {
             $mc['rodzaj'] = 'NonPremium';
        }
         $IP = $mc['ip'];
         $PORT = $mc['port']; 
 		
 	require_once MYBB_ROOT."inc/plugins/minequery/MinecraftQuery.class.php";
-	$Query = new MinecraftQuery();
- 		$Query->Connect($IP, $PORT);
+	try{
+		$Query = new MinecraftQuery();
+ 		$Query->Connect($IP, $PORT, 1);
+		
+    }
+    catch( MinecraftQueryException $e ){
+        $error = $e->getMessage( );
+    }
 
         $dane = $Query->GetInfo();
 	
-	if($info['serverlocked'] !== 0) {
-			
-			$info['serverlocked'] = 'Offline';
-	} elseif($info['serverlocked'] == 0) {
-	$info['serverlocked'] = 'Online';
+	if($dane['MaxPlayers'] == NULL){
+		$status = 'Offline';
+	} 
+	else {
+		$status = 'Online';
 	}
 	
 	if ($dane['Players'] === NULL) {
@@ -227,7 +233,7 @@ if(!$mybb->input['action'])
         $table->construct_cell($dane['Players'].'/'.$dane['MaxPlayers']);
 		$table->construct_cell($dane['Map']);
 		$table->construct_cell($mc['rodzaj']);
-        $table->construct_cell($info['serverlocked']);
+        $table->construct_cell($status);
 		$table->construct_cell("<a href=\"index.php?module=config/mcboard&amp;action=delete&amp;id={$mc['id']}&amp;my_post_key={$mybb->post_code}\" onclick=\"return AdminCP.deleteConfirmation(this, 'Czy na pewno chcesz usunąć ten serwer?')\">Usuń</a> | <a href=\"index.php?module=config/mcboard&amp;action=edit&amp;id={$mc['id']}\">Edytuj</a>");
         $table->construct_row();
         
