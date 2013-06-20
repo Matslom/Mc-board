@@ -1,10 +1,10 @@
 <?php
-/*
+
 if(!defined('IN_MYBB'))
 {
 	die("Direct initialization of this file is not allowed.<br /><br />Please make sure IN_MYBB is defined.");
 }
-*/
+
 $plugins->add_hook("admin_config_menu", "mcboard_admin_config_menu");
 $plugins->add_hook("admin_config_action_handler", "mcboard_admin_config_action_handler");
 $plugins->add_hook("index_start", "mcboard_start");
@@ -55,7 +55,7 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Status:</strong></span></td>
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td>
 		{$mcboard_row}
-		<tr><td class="trow1" align="center" colspan="7"> Na naszych {$serwery_l} serwerach, które mają w sumie {$slot_l} slotów jest {$gracze_l} graczy online.  </td></tr>
+		<tr><td class="trow1" align="center" colspan="7"> Na naszych {$serwery_l} {$lang_serwery}, które mają w sumie {$slot_l} {$lang_sloty} jest {$gracze_l} {$lang_gracze} online.  </td></tr>
         </table><br />';
     $template_row = '<tr>
         <td class="trow2"> <span class="smalltext">{$dane[\'HostName\']}</span></td>
