@@ -44,9 +44,10 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 	$template_table = '<table border="0" cellspacing="1" cellpadding="3" class="tborder">
 		<tr>
 		<td class="thead" align="center" colspan="7">
-		<strong>Serwery</strong>
+		<strong>Serwery</strong> <div class="expcolimage"><img src="{$theme[\'imgdir\']}/collapse.gif" id="mc-board_img" class="expander" alt="{$expaltext}" title="{$expaltext}" /></div>
 		</td>
 		</tr>
+		<tbody style="{$expdisplay}" id="mc-board_e">
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Nazwa:</strong></span></td>
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>IP:</strong></span></td>
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Sloty:</strong></span></td>
@@ -56,7 +57,7 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td>
 		{$mcboard_row}
 		<tr><td class="trow1" align="center" colspan="7"> Na naszych {$serwery_l} {$lang_serwery}, które mają w sumie {$slot_l} {$lang_sloty} jest {$gracze_l} {$lang_gracze} online.  </td></tr>
-        </table><br />';
+        <tbody></table><br />';
     $template_row = '<tr>
         <td class="trow2"> <span class="smalltext">{$dane[\'HostName\']}</span></td>
         <td class="trow2"> <span class="smalltext">{$mc[\'ip\']}:{$mc[\'port\']}</span></td>
