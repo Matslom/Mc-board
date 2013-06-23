@@ -38,12 +38,14 @@ function mcboard_deactivate() // Dezaktywacja
 function mcboard_install() //Instalcja
 {
 	global $db;
-	
+
+//nowa tabela	
 $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`ip` varchar(50) NOT NULL DEFAULT '0',`port` varchar(10) NOT NULL DEFAULT '0', `rodzaj` int(1) NOT NULL DEFAULT '0',PRIMARY KEY (`id`)) ENGINE = MyISAM;");
 
+//szablony
 	$template_table = '<table border="0" cellspacing="1" cellpadding="3" class="tborder">
 		<tr>
-		<td class="thead" align="center" colspan="7">
+		<td class="thead" align="center" colspan="8">
 		<strong>Serwery</strong> <div class="expcolimage"><img src="{$theme[\'imgdir\']}/collapse.gif" id="mc-board_img" class="expander" alt="{$expaltext}" title="{$expaltext}" /></div>
 		</td>
 		</tr>
@@ -54,9 +56,9 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Mapa:</strong></span></td>
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Rodzaj:</strong></span></td>
 		<td class="tcat" colspan="0"><span class="smalltext"><strong>Status:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td></tr>
 		{$mcboard_row}
-		<tr><td class="trow1" align="center" colspan="7"> Na naszych {$serwery_l} {$lang_serwery}, które mają w sumie {$slot_l} {$lang_sloty} jest {$gracze_l} {$lang_gracze} online.  </td></tr>
+		<tr><td class="trow1" align="center" colspan="8"> Na naszych {$serwery_l} {$lang_serwery}, które mają w sumie {$slot_l} {$lang_sloty} jest {$gracze_l} {$lang_gracze} online.  </td></tr>
         <tbody></table><br />';
     $template_row = '<tr>
         <td class="trow2"> <span class="smalltext">{$dane[\'HostName\']}</span></td>
@@ -70,6 +72,25 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 
     $db->write_query("INSERT INTO `".TABLE_PREFIX."templates` VALUES (NULL, 'mcboard', '".$db->escape_string($template_table)."', '-1', '1', '', '".time()."')");
 	$db->write_query("INSERT INTO `".TABLE_PREFIX."templates` VALUES (NULL, 'mcboard_row', '".$db->escape_string($template_row)."', '-1', '1', '', '".time()."')");
+
+//ustawienia
+/*$db->write_query("INSERT INTO `".TABLE_PREFIX."settinggroups` VALUES (NULL, 'mcboard', 'MC-board', 'Konfiguracja pluginu MC-board.', 1, 0)");
+$query = $db->simple_select("settinggroups", "gid", "name = 'mcboard'", array("limit" => 1));
+$gid = $db->fetch_field($query, "gid");
+
+	$mcboard_gt = array(
+		'name'			=> 'mcboard_gt',
+		'title'			=> 'Game Tracker',
+		'description'	=> 'Wyświetlać odnośnik do Game Trackera w tabeli?',
+		'optionscode'	=> 'yesno', 
+		'value'			=> '0', 
+		'disporder'		=> '1', 
+		'gid'			=> intval($gid)
+	);
+
+
+	$db->insert_query('settings', $mcboard_gt);
+	rebuild_settings();  */
 }
 
 
@@ -92,6 +113,7 @@ function mcboard_uninstall() // Odinstalowywanie
 	
 	$db->query("DROP TABLE ".TABLE_PREFIX."mcboard");
 	$db->query("DELETE FROM ".TABLE_PREFIX."templates WHERE title IN('mcboard', 'mcboard_row')");
+	#$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mcboard_gt')");
 }
  
 function mcboard_admin_config_menu(&$sub_menu)

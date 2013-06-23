@@ -27,8 +27,6 @@ if($mybb->input['action'] == "add" || $mybb->input['action'] == "edit" || !$mybb
     );
 }
  
-#/\ dodawanie nowych subsub menu.
- 
 if($mybb->input['action'] == "add")
 {
 	if($mybb->request_method == "post")
@@ -64,7 +62,7 @@ if($mybb->input['action'] == "add")
 
 	$form_container = new FormContainer("Dane");
 	$form_container->output_row("IP:", "Podaj IP serwera.", $form->generate_text_box('ip'));
-		$form_container->output_row("Port:", "Podaj Port serwera.", $form->generate_text_box('port'));
+	$form_container->output_row("Port:", "Podaj Port serwera.", $form->generate_text_box('port'));
 	$select_list = array("Premium", "NonPremium");
 	$form_container->output_row("Rodzaj:", "Wybierz rodzaj serwera.", $form->generate_select_box('rodzaj', $select_list));
 	$form_container->end();
@@ -150,7 +148,7 @@ if($mybb->input['action'] == "edit")
 
 	$form_container = new FormContainer("Edycja serwera");
 	$form_container->output_row("IP:", "Podaj IP serwera.", $form->generate_text_box('ip', htmlspecialchars_uni($mc['ip'])));
-		$form_container->output_row("Port:", "Podaj Port serwera.", $form->generate_text_box('port', htmlspecialchars_uni($mc['port'])));
+	$form_container->output_row("Port:", "Podaj Port serwera.", $form->generate_text_box('port', htmlspecialchars_uni($mc['port'])));
 	$select_list = array("Premium", "NonPremium");
 	$form_container->output_row("Rodzaj:", "Wybierz rodzaj serwera.", $form->generate_select_box('rodzaj', $select_list, htmlspecialchars_uni($mc['rodzaj'])));
 	$form_container->end();
