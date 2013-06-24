@@ -152,10 +152,10 @@ require_once MYBB_ROOT."inc/plugins/minequery/MinecraftQuery.class.php";
 
 while($mc = $db->fetch_array($query)) {
     if(!$mc['rodzaj'] == 2) {
-        $mc['rodzaj'] = 'Premium';
+        $mc['rodzaj'] = $lang->premium;
     }
     elseif($mc['rodzaj'] == 1) {
-        $mc['rodzaj'] = 'NonPremium';
+        $mc['rodzaj'] = $lang->nonpremium;
     }
         
     $IP = $mc['ip'];

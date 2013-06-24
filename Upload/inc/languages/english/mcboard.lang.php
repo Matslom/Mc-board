@@ -12,24 +12,24 @@
  */
 
 // table
-$l['name'] = 'Nazwa';
+$l['name'] = 'Name';
 $l['ip'] = 'IP';
-$l['slott'] = 'Sloty';
-$l['map'] = 'Mapa';
-$l['type'] = 'Rodzaj';
+$l['slott'] = 'Slots';
+$l['map'] = 'Map';
+$l['type'] = 'Type';
 $l['status'] = 'Status';
-$l['version'] = 'Wersja';
-$l['oneserver'] = 'Na naszym 1 serwerze, który ma w sumie';
-$l['servers'] = 'Na naszych {1} serwerach, które mają w sumie';
-$l['slot'] = '{1} sloty';
-$l['slots'] = '{1} slotów';
-$l['player'] = 'jest 1 gracz online.';
-$l['players'] ='jest {1} graczy online.';
+$l['version'] = 'Version';
+$l['oneserver'] = 'On our 1 server, that has a total of';
+$l['servers'] = 'On our {1} servers, that have a total of';
+$l['slot'] = '{1} slots';
+$l['slots'] = '{1} slots';
+$l['player'] = 'and 1 player are online.';
+$l['players'] ='and {1} players are online.';
 $l['online'] = 'Online';
 $l['offline'] = 'Offline';
-$l['premium'] = 'Premium';
+$l['premium'] ='Premium';
 $l['nonpremium'] = 'NonPremium';
 
-
+#On our 1 server, 0 out of 20 slots are used
 
 ?>
