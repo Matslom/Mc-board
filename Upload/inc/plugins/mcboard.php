@@ -1,7 +1,14 @@
 <?php
 
-if(!defined('IN_MYBB'))
-{
+/* 
+ * Plugin MCBoard for MyBB by Matslom [matslom.pl]; Copyright (C) 2012-2013
+ * Github https://github.com/Matslom/Mc-board.git
+ * License GNU GENERAL PUBLIC LICENSE -> http://www.gnu.org/licenses/gpl-3.0.txt
+ * Do not remove this information
+ */
+
+
+if(!defined('IN_MYBB')){
 	die("Direct initialization of this file is not allowed.<br /><br />Please make sure IN_MYBB is defined.");
 }
 
@@ -11,9 +18,12 @@ $plugins->add_hook("index_start", "mcboard_start");
 
 function mcboard_info() // Informacje
 {
+	global $lang;
+	$lang->load("mcboard");
+
 	return array(
-		"name"			=> "MCBoard",
-		"description"	=> "Wtyczka MCBoard pozwala dodawać serwery minecraft na forum. Plugin utowrzony na podstawie CsBoard oraz klasy php autorstwa xPaw.",
+		"name"			=> $lang->plug_title,
+		"description"	=> $lang->plug_desc,
 		"website"		=> "http://www.mybboard.pl",
 		"author"		=> "Matslom",
 		"authorsite"	=> "matslom.pl",
@@ -37,7 +47,8 @@ function mcboard_deactivate() // Dezaktywacja
 
 function mcboard_install() //Instalcja
 {
-	global $db;
+	global $db, $lang;
+	$lang->load("mcboard");
 
 //nowa tabela	
 $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`ip` varchar(50) NOT NULL DEFAULT '0',`port` varchar(10) NOT NULL DEFAULT '0', `rodzaj` int(1) NOT NULL DEFAULT '0',PRIMARY KEY (`id`)) ENGINE = MyISAM;");
@@ -50,15 +61,15 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
 		</td>
 		</tr>
 		<tbody style="{$expdisplay}" id="mc-board_e">
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Nazwa:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>IP:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Sloty:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Mapa:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Rodzaj:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Status:</strong></span></td>
-		<td class="tcat" colspan="0"><span class="smalltext"><strong>Wersja:</strong></span></td></tr>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->name}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->ip}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->slott}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->map}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->type}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->status}:</strong></span></td>
+		<td class="tcat" colspan="0"><span class="smalltext"><strong>{$lang->version}:</strong></span></td></tr>
 		{$mcboard_row}
-		<tr><td class="trow1" align="center" colspan="8"> Na naszych {$serwery_l} {$lang_serwery}, które mają w sumie {$slot_l} {$lang_sloty} jest {$gracze_l} {$lang_gracze} online.  </td></tr>
+		{$mcboard_summation}
         <tbody></table><br />';
     $template_row = '<tr>
         <td class="trow2"> <span class="smalltext">{$dane[\'HostName\']}</span></td>
@@ -69,19 +80,22 @@ $db->write_query("CREATE TABLE ".TABLE_PREFIX."mcboard (`id` int(10) unsigned NO
         <td class="trow2"> <span class="smalltext">{$status}</span></td>
         <td class="trow2"> <span class="smalltext"><a title="{$dane[\'Software\']}">{$dane[\'Version\']}</a><span></td>
         </tr>';
+    $template_summation = '<tr><td class="trow1" align="center" colspan="8"> {$lang_servers} {$lang_sloty} {$lang_gracze}  </td></tr>';
+
 
     $db->write_query("INSERT INTO `".TABLE_PREFIX."templates` VALUES (NULL, 'mcboard', '".$db->escape_string($template_table)."', '-1', '1', '', '".time()."')");
 	$db->write_query("INSERT INTO `".TABLE_PREFIX."templates` VALUES (NULL, 'mcboard_row', '".$db->escape_string($template_row)."', '-1', '1', '', '".time()."')");
+	$db->write_query("INSERT INTO `".TABLE_PREFIX."templates` VALUES (NULL, 'mcboard_summation', '".$db->escape_string($template_summation)."', '-1', '1', '', '".time()."')");
 
 //ustawienia
-/*$db->write_query("INSERT INTO `".TABLE_PREFIX."settinggroups` VALUES (NULL, 'mcboard', 'MC-board', 'Konfiguracja pluginu MC-board.', 1, 0)");
+$db->write_query("INSERT INTO `".TABLE_PREFIX."settinggroups` VALUES (NULL, 'mcboard', 'MCBoard', '".$lang->conf_name."', 1, 0)");
 $query = $db->simple_select("settinggroups", "gid", "name = 'mcboard'", array("limit" => 1));
 $gid = $db->fetch_field($query, "gid");
 
-	$mcboard_gt = array(
-		'name'			=> 'mcboard_gt',
-		'title'			=> 'Game Tracker',
-		'description'	=> 'Wyświetlać odnośnik do Game Trackera w tabeli?',
+	$mcboard_sum = array(
+		'name'			=> 'mcboard_sum',
+		'title'			=> $lang->conf_summation_title,
+		'description'	=> $lang->conf_summation_desc,
 		'optionscode'	=> 'yesno', 
 		'value'			=> '0', 
 		'disporder'		=> '1', 
@@ -89,8 +103,8 @@ $gid = $db->fetch_field($query, "gid");
 	);
 
 
-	$db->insert_query('settings', $mcboard_gt);
-	rebuild_settings();  */
+	$db->insert_query('settings', $mcboard_sum);
+	rebuild_settings();  
 }
 
 
@@ -112,8 +126,9 @@ function mcboard_uninstall() // Odinstalowywanie
 	global $db;
 	
 	$db->query("DROP TABLE ".TABLE_PREFIX."mcboard");
-	$db->query("DELETE FROM ".TABLE_PREFIX."templates WHERE title IN('mcboard', 'mcboard_row')");
-	#$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mcboard_gt')");
+	$db->query("DELETE FROM ".TABLE_PREFIX."templates WHERE title IN('mcboard', 'mcboard_row', 'mcboard_summation')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mcboard_sum')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mcboard'");
 }
  
 function mcboard_admin_config_menu(&$sub_menu)
@@ -127,12 +142,12 @@ function mcboard_admin_config_action_handler(&$actions)
 }
 
 function mcboard_start() {
-    global $mcboard, $db, $theme, $templates;;
+    global $mcboard, $db, $theme, $templates, $lang, $mybb;
+	$lang->load("mcboard");
+
 	
 $query = $db->simple_select('mcboard', '*');
 require_once MYBB_ROOT."inc/plugins/minequery/MinecraftQuery.class.php";
-$Query = new MinecraftQuery();
-Ini_Set( 'display_errors', false );
 
 
 while($mc = $db->fetch_array($query)) {
@@ -147,29 +162,22 @@ while($mc = $db->fetch_array($query)) {
     $PORT = $mc['port']; 
 			
 	try {
+		$Query = new MinecraftQuery();
  		$Query->Connect($IP, $PORT, 1);
     }
     catch( MinecraftQueryException $e ) {
         $error = $e->getMessage();
     }
      $dane = $Query->GetInfo();
-
-	
-	if($info['serverlocked'] !== 0) {
-		$info['serverlocked'] = 'Offline';
-	}
-	elseif($info['serverlocked'] == 0) {
-		$info['serverlocked'] = 'Online';
-	}
 	
 	if ($dane['Players'] === NULL) {
 		$dane['Players'] = '-';
 	}
 	if($dane['MaxPlayers'] == NULL){
-		$status = 'Offline';
+		$status = $lang->online;
 	} 
 	else {
-		$status = 'Online';
+		$status = $lang->offline;
 	}
 
 	if ($dane['MaxPlayers'] === NULL) {
@@ -196,26 +204,33 @@ while($mc = $db->fetch_array($query)) {
 
 }
 
+if($mybb->settings['mcboard_sum'] == '1') {
+
 	if ($serwery_l == '1'){
-    	$lang_serwery = 'serwerze'; 
+    	$lang_servers = $lang->oneserver; 
     }
     else {               
-		$lang_serwery = 'serwerach';
+		$lang_servers = $lang->sprintf($lang->servers, $serwery_l);
    	}
 
    	if ($gracze_l == '1') {
-   		$lang_gracze = 'gracz';
+   		$lang_gracze = $lang->player;
    	}
    	else {
-   		$lang_gracze = 'graczy';
+   		$lang_gracze = $lang->sprintf($lang->players, $gracze_l);
    	}
 
-   	if ($slot_l < '5') {
-   		$lang_sloty = 'sloty';
+   	if($slot_l == '0') {
+   		$lang_sloty = $lang->sprintf($lang->slots, $slot_l);
+   	}
+   	elseif ($slot_l < '5') {
+   		$lang_sloty = $lang->sprintf($lang->slot, $slot_l);
    	}
    	else {
-   		$lang_sloty ='slotów';
+   		$lang_sloty = $lang->sprintf($lang->slots, $slot_l);
    	}
+   	eval('$mcboard_summation = "'.$templates->get('mcboard_summation').'";');
+}
 
     eval('$mcboard = "'.$templates->get('mcboard').'";');
 
