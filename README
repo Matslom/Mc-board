@@ -1,1 +1,9 @@
-Test
+MCBoard - plugin for MyBB
+
+MCBoard  displays the status of your server list Minecraft. Easily change the look with templates.
+
+Install:
+1.Extract archives
+2.Upload folder contents "Upload"
+3.Activate plugin with ACP -> Configuration -> Plugins
+4.Add server with ACP -> Configuration -> MCBoard
