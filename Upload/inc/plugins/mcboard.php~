@@ -24,11 +24,11 @@ function mcboard_info() // Informacje
 	return array(
 		"name"			=> $lang->plug_title,
 		"description"	=> $lang->plug_desc,
-	"website"		=> "https://github.com/Matslom/Mc-board",
+		"website"		=> "http://www.mybboard.pl",
 		"author"		=> "Matslom",
-		"authorsite"	=> "http://matslom.pl/",
+		"authorsite"	=> "matslom.pl",
 		"version"		=> "1.0.0",
-		'guid'          => '',
+		'guid'          => '*',
 		'compatibility' => '16*'
 	);
 }
@@ -174,10 +174,10 @@ while($mc = $db->fetch_array($query)) {
 		$dane['Players'] = '-';
 	}
 	if($dane['MaxPlayers'] == NULL){
-		$status = $lang->offline;
+		$status = $lang->online;
 	} 
 	else {
-		$status = $lang->online;
+		$status = $lang->offline;
 	}
 
 	if ($dane['MaxPlayers'] === NULL) {
