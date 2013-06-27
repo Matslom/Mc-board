@@ -28,7 +28,7 @@ function mcboard_info() // Informacje
 		"author"		=> "Matslom",
 		"authorsite"	=> "http://matslom.pl/",
 		"version"		=> "1.0.0",
-		'guid'          => '',
+		'guid'          => '5260438caebf4fcfbc3c8faefc67848a',
 		'compatibility' => '16*'
 	);
 }
